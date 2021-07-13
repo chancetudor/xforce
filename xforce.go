@@ -136,7 +136,7 @@ func getRequest(c *Client) *MalHash {
 }
 
 func getHash() string {
-	fmt.Println("Please enter the hash or a list of hashes, comma-separated, you're querying for:")
+	fmt.Println("Please enter the hash you're querying for:")
 	// TODO implement this for a list of hashes from CSV
 	// return list of hashes, make channels from that to use goRoutines for http requests
 	var hash string
@@ -208,15 +208,12 @@ func getAPIAuth() (string, string) {
 
 // makes config.json in current directory
 func makeConfigFile(basePath string) {
-	fmt.Println("attempting to make config file directory at " + basePath)
 	// create config file
 	err := os.MkdirAll(basePath, 0777)
 	if err != nil {
 		fmt.Println("error, file could not be created")
 		return
 	}
-
-	fmt.Println("successfully made config file")
 }
 
 
