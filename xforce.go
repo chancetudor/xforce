@@ -97,6 +97,7 @@ func formURL(hash string) *url.URL {
 }
 
 func getRequest(c *Client) *MalHash {
+	// TODO implement parallelization
 	req, err := http.NewRequest("GET", c.url, nil)
 	if err != nil {
 		log.Fatalln(err)
@@ -117,7 +118,6 @@ func getRequest(c *Client) *MalHash {
 	defer resp.Body.Close()
 
 	// read JSON response
-	// TODO no ReadAll, limitedreader instead
 	// establish limitedreader to read body up to 1MB
 	lmtReader := io.LimitReader(resp.Body, 1e+4)
 	body, err := ioutil.ReadAll(lmtReader)
@@ -137,8 +137,12 @@ func getRequest(c *Client) *MalHash {
 
 func getHash() string {
 	fmt.Println("Please enter the hash you're querying for:")
+	// TODO implement this for a list of hashes
 	var hash string
-	fmt.Scanln(&hash)
+	_, err := fmt.Scanln(&hash)
+	if err != nil {
+		log.Fatal("Error reading hash from input")
+	}
 
 	return hash
 }
@@ -158,7 +162,6 @@ func output(info *MalHash) {
 
 // init() is our set-up code
 // we check to see if the user has already provided their API Key + PWD
-// since API Keys + PWDs will be stored at config.json,
 // if config.json does not exist,
 // we prompt user for API Key + PWD and write to config.json
 func init() {
