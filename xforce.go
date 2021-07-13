@@ -97,7 +97,7 @@ func formURL(hash string) *url.URL {
 }
 
 func getRequest(c *Client) *MalHash {
-	// TODO implement parallelization
+	// TODO implement parallelization (go routines)
 	req, err := http.NewRequest("GET", c.url, nil)
 	if err != nil {
 		log.Fatalln(err)
@@ -136,8 +136,9 @@ func getRequest(c *Client) *MalHash {
 }
 
 func getHash() string {
-	fmt.Println("Please enter the hash you're querying for:")
-	// TODO implement this for a list of hashes
+	fmt.Println("Please enter the hash or a list of hashes, comma-separated, you're querying for:")
+	// TODO implement this for a list of hashes from CSV
+	// return list of hashes, make channels from that to use goRoutines for http requests
 	var hash string
 	_, err := fmt.Scanln(&hash)
 	if err != nil {
@@ -222,8 +223,8 @@ func makeConfigFile(basePath string) {
 func main() {
 	client := newClient()
 	hash := getHash()
+	// TODO implement channels
 	reqURL := formURL(hash)
-
 	client.setReqURL(reqURL.String())
 	resp := getRequest(client)
 	output(resp)
